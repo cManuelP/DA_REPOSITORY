@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portafolio — Cristian Palomino · Data Analyst</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --navy:#1a2744; --navy-light:#253460; --teal:#2ec4b6; --teal-light:#e0faf8;
+  --amber:#f4a261; --coral:#e76f51; --bg:#f8f9fc; --white:#ffffff;
+  --text:#1a2744; --text-muted:#6b7c9a; --border:#e2e8f4;
+  --tag-bg:#eef2ff; --tag-text:#3b5bdb;
+}
+body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--text); }
+
+/* HEADER */
+.header { background:var(--navy); padding:40px 40px 0; position:relative; overflow:hidden; }
+.header::before { content:''; position:absolute; top:-60px; right:-60px; width:220px; height:220px; border-radius:50%; background:rgba(46,196,182,.12); }
+.header::after  { content:''; position:absolute; bottom:-40px; left:30%; width:140px; height:140px; border-radius:50%; background:rgba(244,162,97,.08); }
+.portfolio-badge { display:inline-block; background:rgba(46,196,182,.18); color:var(--teal); font-size:11px; font-weight:500; letter-spacing:.08em; text-transform:uppercase; padding:4px 12px; border-radius:20px; border:1px solid rgba(46,196,182,.3); margin-bottom:10px; }
+.header h1 { font-family:'Playfair Display',serif; font-size:28px; color:#fff; font-weight:600; margin-bottom:4px; }
+.header-sub { color:rgba(255,255,255,.55); font-size:13px; margin-bottom:28px; }
+.export-btn { position:absolute; top:32px; right:40px; z-index:10; background:rgba(255,255,255,.08); color:rgba(255,255,255,.8); border:1px solid rgba(255,255,255,.2); padding:8px 16px; border-radius:8px; font-size:12px; font-weight:500; cursor:pointer; font-family:'DM Sans',sans-serif; display:flex; align-items:center; gap:6px; transition:all .2s; }
+.export-btn:hover { background:rgba(255,255,255,.16); border-color:rgba(255,255,255,.35); }
+.tabs { display:flex; gap:6px; position:relative; z-index:1; }
+.tab-btn { background:rgba(255,255,255,.06); color:rgba(255,255,255,.5); border:1px solid rgba(255,255,255,.1); padding:9px 18px; border-radius:8px 8px 0 0; font-size:13px; font-weight:400; cursor:pointer; transition:all .2s; font-family:'DM Sans',sans-serif; border-bottom:none; margin-bottom:-1px; }
+.tab-btn.active { background:var(--bg); color:var(--navy); border-color:var(--border); font-weight:500; }
+.tab-btn:not(.active):hover { background:rgba(255,255,255,.12); color:rgba(255,255,255,.8); }
+
+.content { padding:28px 40px; }
+.view { display:none; }
+.view.active { display:block; }
+
+/* PROJECT CARDS */
+.project-card { background:var(--white); border:1px solid var(--border); border-radius:16px; overflow:hidden; margin-bottom:28px; }
+.project-header { display:flex; justify-content:space-between; align-items:flex-start; padding:24px 28px 20px; border-bottom:1px solid var(--border); background:#fafbfd; }
+.proj-number { font-size:11px; font-weight:500; color:var(--teal); letter-spacing:.08em; text-transform:uppercase; margin-bottom:6px; }
+.proj-title { font-family:'Playfair Display',serif; font-size:20px; font-weight:600; color:var(--navy); margin-bottom:4px; }
+.proj-subtitle { font-size:13px; color:var(--text-muted); }
+.tags { display:flex; gap:6px; flex-wrap:wrap; justify-content:flex-end; }
+.tag { background:var(--tag-bg); color:var(--tag-text); font-size:11px; font-weight:500; padding:3px 10px; border-radius:20px; border:1px solid #dce4ff; }
+.story { display:grid; grid-template-columns:1fr 1fr; border-bottom:1px solid var(--border); }
+.story-box { padding:20px 24px; border-right:1px solid var(--border); }
+.story-box:last-child { border-right:none; }
+.story-label { font-size:10px; font-weight:600; letter-spacing:.1em; text-transform:uppercase; color:var(--text-muted); margin-bottom:6px; }
+.story-text { font-size:13px; line-height:1.6; }
+.kpi-row { display:grid; grid-template-columns:repeat(4,1fr); border-bottom:1px solid var(--border); }
+.kpi { padding:18px 20px; border-right:1px solid var(--border); text-align:center; }
+.kpi:last-child { border-right:none; }
+.kpi-value { font-family:'Playfair Display',serif; font-size:24px; font-weight:600; color:var(--navy); }
+.kpi-label { font-size:11px; color:var(--text-muted); margin-top:2px; }
+.kpi-delta { font-size:11px; font-weight:500; margin-top:2px; color:#16a34a; }
+.kpi-delta.neg { color:#dc2626; }
+.chart-area { padding:24px 28px; }
+.chart-grid { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:20px; }
+.chart-box { background:#fafbfd; border:1px solid var(--border); border-radius:12px; padding:16px 16px 12px; }
+.chart-box.full { grid-column:1/-1; }
+.chart-title { font-size:13px; font-weight:500; color:var(--navy); margin-bottom:4px; }
+.chart-subtitle { font-size:11px; color:var(--text-muted); margin-bottom:12px; }
+.chart-wrap { position:relative; height:180px; }
+.chart-wrap-tall { position:relative; height:200px; }
+.insights { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-top:4px; }
+.insight-card { background:#f0fdf8; border:1px solid #bfece5; border-radius:10px; padding:14px 16px; }
+.insight-card.warn { background:#fff7ed; border-color:#fed7aa; }
+.insight-card.info { background:#eef2ff; border-color:#c7d2fe; }
+.insight-icon { font-size:16px; margin-bottom:6px; }
+.insight-title { font-size:12px; font-weight:600; color:var(--navy); margin-bottom:3px; }
+.insight-text { font-size:11px; color:var(--text-muted); line-height:1.5; }
+.method-section { padding:20px 28px; background:#fafbfd; border-top:1px solid var(--border); }
+.method-title { font-size:12px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:var(--text-muted); margin-bottom:12px; }
+.method-steps { display:flex; gap:0; align-items:stretch; }
+.method-step { display:flex; align-items:flex-start; gap:10px; flex:1; padding-right:16px; position:relative; }
+.method-step::after { content:'→'; position:absolute; right:0; top:50%; transform:translateY(-50%); color:var(--text-muted); font-size:14px; }
+.method-step:last-child::after { display:none; }
+.step-num { width:26px; height:26px; border-radius:50%; background:var(--navy); color:#fff; font-size:12px; font-weight:600; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.step-text { font-size:12px; line-height:1.5; }
+.step-label { font-weight:600; font-size:12px; color:var(--navy); }
+
+/* SOBRE MÍ */
+.about-grid { display:grid; grid-template-columns:2fr 1fr; gap:24px; }
+.about-main { background:var(--white); border:1px solid var(--border); border-radius:16px; overflow:hidden; }
+.about-hero { background:var(--navy); padding:32px 32px 28px; position:relative; overflow:hidden; }
+.about-hero::before { content:''; position:absolute; top:-30px; right:-30px; width:130px; height:130px; border-radius:50%; background:rgba(46,196,182,.1); }
+.avatar { width:64px; height:64px; border-radius:50%; background:linear-gradient(135deg,var(--teal),#1a9e92); display:flex; align-items:center; justify-content:center; font-family:'Playfair Display',serif; font-size:22px; color:#fff; font-weight:600; margin-bottom:14px; border:2px solid rgba(255,255,255,.2); }
+.about-name { font-family:'Playfair Display',serif; font-size:22px; color:#fff; font-weight:600; margin-bottom:4px; }
+.about-role { color:var(--teal); font-size:13px; font-weight:500; }
+.about-body { padding:28px 32px; }
+.section-label { font-size:10px; font-weight:600; letter-spacing:.1em; text-transform:uppercase; color:var(--text-muted); margin-bottom:10px; }
+.about-bio { font-size:14px; line-height:1.75; color:var(--text-muted); margin-bottom:28px; }
+.about-bio strong { color:var(--navy); font-weight:500; }
+.tool-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; margin-bottom:28px; }
+.tool-item { display:flex; align-items:center; gap:10px; background:#fafbfd; border:1px solid var(--border); border-radius:10px; padding:10px 14px; }
+.tool-icon { width:32px; height:32px; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:15px; flex-shrink:0; }
+.tool-icon.py  { background:#eef7ed; }
+.tool-icon.sql { background:#eef2ff; }
+.tool-icon.tb  { background:#fff3e8; }
+.tool-icon.ml  { background:#fdf0f8; }
+.tool-name { font-size:13px; font-weight:500; color:var(--navy); }
+.tool-desc { font-size:11px; color:var(--text-muted); }
+.progress-row { margin-bottom:12px; }
+.progress-header { display:flex; justify-content:space-between; margin-bottom:5px; }
+.progress-label { font-size:12px; font-weight:500; color:var(--navy); }
+.progress-pct { font-size:11px; color:var(--text-muted); }
+.progress-bar { height:6px; background:var(--border); border-radius:3px; overflow:hidden; }
+.progress-fill { height:100%; border-radius:3px; background:var(--teal); }
+.progress-fill.amber { background:var(--amber); }
+.progress-fill.navy  { background:var(--navy); }
+.progress-fill.coral { background:var(--coral); }
+
+/* CONTACTO */
+.contact-sidebar { display:flex; flex-direction:column; gap:16px; }
+.contact-card { background:var(--white); border:1px solid var(--border); border-radius:16px; padding:24px; }
+.contact-card h3 { font-family:'Playfair Display',serif; font-size:16px; color:var(--navy); margin-bottom:18px; }
+.contact-item { display:flex; align-items:flex-start; gap:12px; margin-bottom:16px; }
+.contact-item:last-child { margin-bottom:0; }
+.contact-ico { width:36px; height:36px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:16px; flex-shrink:0; }
+.contact-ico.mail { background:#eef2ff; }
+.contact-ico.loc  { background:var(--teal-light); }
+.contact-ico.li   { background:#e8f0fe; }
+.contact-val { font-size:13px; font-weight:500; color:var(--navy); word-break:break-all; }
+.contact-sub { font-size:11px; color:var(--text-muted); margin-top:2px; }
+.contact-link { color:#2563eb; text-decoration:none; font-size:12px; font-weight:500; }
+.contact-link:hover { text-decoration:underline; }
+
+/* NOTION CARD */
+.notion-card { background:var(--navy); border-radius:16px; padding:24px; position:relative; overflow:hidden; }
+.notion-card::before { content:''; position:absolute; bottom:-20px; right:-20px; width:90px; height:90px; border-radius:50%; background:rgba(46,196,182,.12); }
+.notion-card h3 { font-size:15px; color:#fff; font-weight:500; margin-bottom:6px; }
+.notion-card p { font-size:12px; color:rgba(255,255,255,.5); margin-bottom:16px; line-height:1.5; }
+.notion-btn { width:100%; background:var(--teal); color:var(--navy); border:none; padding:10px 0; border-radius:8px; font-size:13px; font-weight:600; cursor:pointer; font-family:'DM Sans',sans-serif; display:flex; align-items:center; justify-content:center; gap:8px; transition:opacity .2s; }
+.notion-btn:hover { opacity:.85; }
+.notion-steps { margin-top:14px; }
+.notion-step { display:flex; align-items:flex-start; gap:8px; margin-bottom:8px; }
+.nstep-num { width:18px; height:18px; border-radius:50%; background:rgba(255,255,255,.1); color:rgba(255,255,255,.7); font-size:10px; font-weight:600; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:1px; }
+.nstep-txt { font-size:11px; color:rgba(255,255,255,.55); line-height:1.5; }
+
+/* MODAL */
+.modal-overlay { display:none; position:fixed; inset:0; z-index:1000; background:rgba(0,0,0,.45); align-items:center; justify-content:center; }
+.modal-overlay.open { display:flex; }
+.modal { background:var(--white); border-radius:16px; padding:32px; width:480px; max-width:92vw; border:1px solid var(--border); }
+.modal h3 { font-family:'Playfair Display',serif; font-size:20px; color:var(--navy); margin-bottom:8px; }
+.modal p { font-size:13px; color:var(--text-muted); line-height:1.6; margin-bottom:20px; }
+.modal-step { display:flex; gap:12px; margin-bottom:12px; align-items:flex-start; }
+.mstep-n { width:24px; height:24px; border-radius:50%; background:var(--navy); color:#fff; font-size:11px; font-weight:600; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.mstep-t { font-size:13px; color:var(--text); line-height:1.5; }
+.mstep-t strong { color:var(--navy); font-weight:500; }
+.modal-btns { display:flex; gap:10px; margin-top:24px; }
+.modal-dl { flex:1; background:var(--navy); color:#fff; border:none; padding:11px 0; border-radius:8px; font-size:13px; font-weight:500; cursor:pointer; font-family:'DM Sans',sans-serif; transition:opacity .2s; }
+.modal-dl:hover { opacity:.85; }
+.modal-close { background:transparent; color:var(--text-muted); border:1px solid var(--border); padding:11px 20px; border-radius:8px; font-size:13px; cursor:pointer; font-family:'DM Sans',sans-serif; }
+</style>
+</head>
+<body>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="notionModal">
+  <div class="modal">
+    <h3>Exportar a Notion</h3>
+    <p>Sigue estos pasos para llevar tu portafolio a Notion como una página editable:</p>
+    <div class="modal-step"><div class="mstep-n">1</div><div class="mstep-t">Haz clic en <strong>"Descargar HTML"</strong> para guardar el archivo en tu computadora.</div></div>
+    <div class="modal-step"><div class="mstep-n">2</div><div class="mstep-t">Abre Notion y crea una <strong>nueva página en blanco</strong> en tu workspace.</div></div>
+    <div class="modal-step"><div class="mstep-n">3</div><div class="mstep-t">Ve al menú <strong>···</strong> (tres puntos) de la página → <strong>Importar</strong> → selecciona <strong>HTML</strong>.</div></div>
+    <div class="modal-step"><div class="mstep-n">4</div><div class="mstep-t">Sube el archivo descargado. Notion convertirá el contenido a bloques editables.</div></div>
+    <div class="modal-step"><div class="mstep-n">5</div><div class="mstep-t">Ajusta el diseño final en Notion: agrega un cover, íconos y comparte con el link público.</div></div>
+    <div class="modal-btns">
+      <button class="modal-dl" onclick="downloadHTML()">⬇ Descargar HTML</button>
+      <button class="modal-close" onclick="closeModal()">Cerrar</button>
+    </div>
+  </div>
+</div>
+
+<!-- HEADER -->
+<div class="header">
+  <button class="export-btn" onclick="openModal()">⬡ Exportar a Notion</button>
+  <div class="portfolio-badge">Data Analyst · Nivel Básico</div>
+  <h1>Portafolio de Análisis de Datos</h1>
+  <p class="header-sub">Cristian Palomino — Lima, Perú &nbsp;·&nbsp; Python · SQL · Tableau · Modelos predictivos</p>
+  <div class="tabs">
+    <button class="tab-btn active" onclick="showView('projects',this)">Proyectos</button>
+    <button class="tab-btn" onclick="showView('sobre',this)">Sobre mí</button>
+  </div>
+</div>
+
+<div class="content">
+
+<!-- ══ PROYECTOS ══ -->
+<div id="view-projects" class="view active">
+
+  <!-- PROYECTO 1 -->
+  <div class="project-card">
+    <div class="project-header">
+      <div>
+        <div class="proj-number">Proyecto 01</div>
+        <div class="proj-title">Análisis de Ventas — Tienda "FreshMart"</div>
+        <div class="proj-subtitle">Identificación de patrones mensuales y productos de bajo rendimiento</div>
+      </div>
+      <div class="tags">
+        <span class="tag">Excel / CSV</span>
+        <span class="tag">Estadística descriptiva</span>
+        <span class="tag">Visualización</span>
+      </div>
+    </div>
+    <div class="story">
+      <div class="story-box">
+        <div class="story-label">Problema</div>
+        <div class="story-text">La tienda de abarrotes FreshMart notó que sus ingresos variaban mucho mes a mes sin entender por qué. La gerente quería saber qué categorías impulsan las ventas y en qué meses hay caídas críticas.</div>
+      </div>
+      <div class="story-box">
+        <div class="story-label">Objetivo del análisis</div>
+        <div class="story-text">Describir la tendencia de ventas de los últimos 12 meses, identificar las 3 categorías top y las 2 de menor rendimiento, y proponer recomendaciones basadas en datos.</div>
+      </div>
+    </div>
+    <div class="kpi-row">
+      <div class="kpi"><div class="kpi-value">S/ 842K</div><div class="kpi-label">Ventas anuales</div><div class="kpi-delta">↑ 8.3% vs año anterior</div></div>
+      <div class="kpi"><div class="kpi-value">S/ 70.2K</div><div class="kpi-label">Promedio mensual</div><div class="kpi-delta">±12% desviación</div></div>
+      <div class="kpi"><div class="kpi-value">Dic</div><div class="kpi-label">Mes pico (S/ 98K)</div><div class="kpi-delta">↑ 40% sobre promedio</div></div>
+      <div class="kpi"><div class="kpi-value">Feb</div><div class="kpi-label">Mes más bajo (S/ 51K)</div><div class="kpi-delta neg">↓ 27% bajo promedio</div></div>
+    </div>
+    <div class="chart-area">
+      <div class="chart-grid">
+        <div class="chart-box full">
+          <div class="chart-title">Ventas mensuales 2024 (S/ miles)</div>
+          <div class="chart-subtitle">Tendencia de ingresos + media móvil de 3 meses</div>
+          <div class="chart-wrap-tall"><canvas id="c1"></canvas></div>
+        </div>
+        <div class="chart-box">
+          <div class="chart-title">Ventas por categoría</div>
+          <div class="chart-subtitle">Participación anual</div>
+          <div class="chart-wrap"><canvas id="c2"></canvas></div>
+        </div>
+        <div class="chart-box">
+          <div class="chart-title">Top 5 productos</div>
+          <div class="chart-subtitle">Por ingreso acumulado (S/ miles)</div>
+          <div class="chart-wrap"><canvas id="c3"></canvas></div>
+        </div>
+      </div>
+      <div class="insights">
+        <div class="insight-card"><div class="insight-icon">📈</div><div class="insight-title">Estacionalidad clara en Q4</div><div class="insight-text">Nov–Dic representan el 22% de las ventas anuales. Se recomienda reforzar stock 6 semanas antes.</div></div>
+        <div class="insight-card warn"><div class="insight-icon">⚠️</div><div class="insight-title">Limpieza tiene bajo margen</div><div class="insight-text">A pesar del volumen, limpieza aporta solo el 11% con ticket promedio de S/ 8.40.</div></div>
+        <div class="insight-card info"><div class="insight-icon">💡</div><div class="insight-title">Lácteos: oportunidad de upsell</div><div class="insight-text">Lácteos lidera en volumen. Un bundle con bebidas podría aumentar el ticket promedio.</div></div>
+      </div>
+    </div>
+    <div class="method-section">
+      <div class="method-title">Metodología aplicada</div>
+      <div class="method-steps">
+        <div class="method-step"><div class="step-num">1</div><div><div class="step-label">Recolección</div><div class="step-text">CSV de transacciones (4,820 filas)</div></div></div>
+        <div class="method-step"><div class="step-num">2</div><div><div class="step-label">Limpieza</div><div class="step-text">Eliminación de duplicados y nulos</div></div></div>
+        <div class="method-step"><div class="step-num">3</div><div><div class="step-label">Análisis</div><div class="step-text">Estadística descriptiva por mes y categoría</div></div></div>
+        <div class="method-step"><div class="step-num">4</div><div><div class="step-label">Visualización</div><div class="step-text">Gráficas de línea, donut y barras</div></div></div>
+        <div class="method-step"><div class="step-num">5</div><div><div class="step-label">Insights</div><div class="step-text">3 recomendaciones accionables</div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROYECTO 2 -->
+  <div class="project-card">
+    <div class="project-header">
+      <div>
+        <div class="proj-number">Proyecto 02</div>
+        <div class="proj-title">Análisis de Retención de Clientes — App "FitPulse"</div>
+        <div class="proj-subtitle">Segmentación de usuarios y detección de churn en aplicación de fitness</div>
+      </div>
+      <div class="tags">
+        <span class="tag">Python / Pandas</span>
+        <span class="tag">Segmentación</span>
+        <span class="tag">Churn Analysis</span>
+      </div>
+    </div>
+    <div class="story">
+      <div class="story-box">
+        <div class="story-label">Problema</div>
+        <div class="story-text">FitPulse tiene 12,000 usuarios registrados pero solo el 34% sigue activo después de 90 días. El equipo necesita entender qué perfil abandona la app y en qué momento.</div>
+      </div>
+      <div class="story-box">
+        <div class="story-label">Objetivo del análisis</div>
+        <div class="story-text">Calcular la tasa de retención por cohorte mensual, segmentar usuarios por actividad y detectar el punto crítico de abandono en el journey del usuario.</div>
+      </div>
+    </div>
+    <div class="kpi-row">
+      <div class="kpi"><div class="kpi-value">34%</div><div class="kpi-label">Retención a 90 días</div><div class="kpi-delta neg">↓ vs benchmark 45%</div></div>
+      <div class="kpi"><div class="kpi-value">Día 7</div><div class="kpi-label">Punto crítico de churn</div><div class="kpi-delta neg">−38% abandono aquí</div></div>
+      <div class="kpi"><div class="kpi-value">4,080</div><div class="kpi-label">Usuarios activos</div><div class="kpi-delta">De 12,000 registrados</div></div>
+      <div class="kpi"><div class="kpi-value">S/ 61K</div><div class="kpi-label">Ingresos en riesgo</div><div class="kpi-delta neg">Segmento "En riesgo"</div></div>
+    </div>
+    <div class="chart-area">
+      <div class="chart-grid">
+        <div class="chart-box">
+          <div class="chart-title">Curva de retención por cohorte</div>
+          <div class="chart-subtitle">% de usuarios activos según semana desde registro</div>
+          <div class="chart-wrap"><canvas id="c4"></canvas></div>
+        </div>
+        <div class="chart-box">
+          <div class="chart-title">Segmentación de usuarios</div>
+          <div class="chart-subtitle">Distribución por estado de actividad</div>
+          <div class="chart-wrap"><canvas id="c5"></canvas></div>
+        </div>
+        <div class="chart-box full">
+          <div class="chart-title">Actividad semanal promedio por tipo de usuario</div>
+          <div class="chart-subtitle">Sesiones por semana — primeras 12 semanas</div>
+          <div class="chart-wrap-tall"><canvas id="c6"></canvas></div>
+        </div>
+      </div>
+      <div class="insights">
+        <div class="insight-card"><div class="insight-icon">🎯</div><div class="insight-title">El día 7 es la barrera clave</div><div class="insight-text">Un push notification entre el día 5–7 podría reducir el churn temprano hasta en un 25%.</div></div>
+        <div class="insight-card warn"><div class="insight-icon">🔴</div><div class="insight-title">2,400 usuarios en riesgo</div><div class="insight-text">Con una campaña de reactivación, se estima recuperar el 18% de este segmento.</div></div>
+        <div class="insight-card info"><div class="insight-icon">🏆</div><div class="insight-title">Usuarios premium retienen mejor</div><div class="insight-text">Plan de pago tiene 2.3× más probabilidad de retención a 90 días vs freemium.</div></div>
+      </div>
+    </div>
+    <div class="method-section">
+      <div class="method-title">Metodología aplicada</div>
+      <div class="method-steps">
+        <div class="method-step"><div class="step-num">1</div><div><div class="step-label">Fuente</div><div class="step-text">Tabla de eventos de la app</div></div></div>
+        <div class="method-step"><div class="step-num">2</div><div><div class="step-label">Cohortes</div><div class="step-text">Agrupación por mes de registro</div></div></div>
+        <div class="method-step"><div class="step-num">3</div><div><div class="step-label">Segmentación</div><div class="step-text">Activo / En riesgo / Perdido</div></div></div>
+        <div class="method-step"><div class="step-num">4</div><div><div class="step-label">Churn point</div><div class="step-text">Tasa de abandono por semana</div></div></div>
+        <div class="method-step"><div class="step-num">5</div><div><div class="step-label">Impacto</div><div class="step-text">Cuantificación en ingresos</div></div></div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /view-projects -->
+
+<!-- ══ SOBRE MÍ ══ -->
+<div id="view-sobre" class="view">
+  <div class="about-grid">
+
+    <div class="about-main">
+      <div class="about-hero">
+        <div class="avatar">CP</div>
+        <div class="about-name">Cristian Palomino</div>
+        <div class="about-role">Junior Data Analyst &nbsp;·&nbsp; Lima, Perú</div>
+      </div>
+      <div class="about-body">
+
+        <div class="section-label" style="margin-bottom:10px">Sobre mí</div>
+        <div class="about-bio">
+          Soy un profesional en formación apasionado por convertir datos en decisiones. Me encuentro en los primeros pasos de mi carrera en análisis de datos, construyendo una base sólida en <strong>Python, SQL, Tableau</strong> y <strong>modelos predictivos</strong> a través de proyectos prácticos y aprendizaje continuo.<br><br>
+          Me interesa especialmente el análisis orientado a negocio: entender el problema primero, limpiar y explorar los datos con rigor, y comunicar hallazgos de forma clara a audiencias no técnicas. Cada proyecto es una oportunidad de aplicar lo aprendido en contextos reales y desarrollar pensamiento analítico.<br><br>
+          Actualmente profundizo en <strong>machine learning supervisado</strong> (regresión y clasificación), mejores prácticas de visualización de datos y storytelling analítico. Busco mi primera oportunidad profesional donde pueda aportar valor y seguir creciendo dentro de un equipo orientado a datos.
+        </div>
+
+        <div class="section-label" style="margin-bottom:10px">Herramientas y tecnologías</div>
+        <div class="tool-grid">
+          <div class="tool-item"><div class="tool-icon py">🐍</div><div><div class="tool-name">Python</div><div class="tool-desc">Pandas, Matplotlib, Seaborn, Scikit-learn</div></div></div>
+          <div class="tool-item"><div class="tool-icon sql">🗄️</div><div><div class="tool-name">SQL</div><div class="tool-desc">Consultas, JOINs, agregaciones, subconsultas</div></div></div>
+          <div class="tool-item"><div class="tool-icon tb">📊</div><div><div class="tool-name">Tableau</div><div class="tool-desc">Dashboards interactivos y visualización de KPIs</div></div></div>
+          <div class="tool-item"><div class="tool-icon ml">🤖</div><div><div class="tool-name">Modelos predictivos</div><div class="tool-desc">Regresión, clasificación, validación cruzada</div></div></div>
+        </div>
+
+        <div class="section-label" style="margin-bottom:12px">Nivel de dominio actual</div>
+        <div class="progress-row"><div class="progress-header"><span class="progress-label">Python (Pandas / visualización)</span><span class="progress-pct">65%</span></div><div class="progress-bar"><div class="progress-fill" style="width:65%"></div></div></div>
+        <div class="progress-row"><div class="progress-header"><span class="progress-label">SQL</span><span class="progress-pct">70%</span></div><div class="progress-bar"><div class="progress-fill amber" style="width:70%"></div></div></div>
+        <div class="progress-row"><div class="progress-header"><span class="progress-label">Tableau</span><span class="progress-pct">55%</span></div><div class="progress-bar"><div class="progress-fill navy" style="width:55%"></div></div></div>
+        <div class="progress-row"><div class="progress-header"><span class="progress-label">Machine Learning básico</span><span class="progress-pct">45%</span></div><div class="progress-bar"><div class="progress-fill coral" style="width:45%"></div></div></div>
+
+      </div>
+    </div>
+
+    <!-- SIDEBAR -->
+    <div class="contact-sidebar">
+
+      <div class="contact-card">
+        <h3>Contacto</h3>
+        <div class="contact-item">
+          <div class="contact-ico mail">✉️</div>
+          <div>
+            <div class="contact-val">cristian.palomino@email.com</div>
+            <div class="contact-sub">Correo electrónico</div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-ico loc">📍</div>
+          <div>
+            <div class="contact-val">Lima, Perú</div>
+            <div class="contact-sub">Disponible para trabajo remoto</div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-ico li">🔗</div>
+          <div>
+            <div class="contact-val">LinkedIn</div>
+            <div class="contact-sub">
+              <a class="contact-link" href="https://www.linkedin.com/in/cristian-palomino-llecllish" target="_blank">
+                cristian-palomino-llecllish →
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="notion-card">
+        <h3>Exportar a Notion</h3>
+        <p>Descarga este portafolio como HTML e impórtalo en tu workspace de Notion en minutos.</p>
+        <button class="notion-btn" onclick="openModal()">⬡ &nbsp;Ver guía de exportación</button>
+        <div class="notion-steps">
+          <div class="notion-step"><div class="nstep-num">1</div><div class="nstep-txt">Descargar el archivo HTML</div></div>
+          <div class="notion-step"><div class="nstep-num">2</div><div class="nstep-txt">En Notion → ··· → Importar → HTML</div></div>
+          <div class="notion-step"><div class="nstep-num">3</div><div class="nstep-txt">Subir y personalizar a tu gusto</div></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div><!-- /view-sobre -->
+
+</div><!-- /content -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+function showView(v,btn){
+  document.querySelectorAll('.view').forEach(el=>el.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('view-'+v).classList.add('active');
+  btn.classList.add('active');
+}
+function openModal(){document.getElementById('notionModal').classList.add('open');}
+function closeModal(){document.getElementById('notionModal').classList.remove('open');}
+document.getElementById('notionModal').addEventListener('click',function(e){if(e.target===this)closeModal();});
+function downloadHTML(){
+  const blob=new Blob([document.documentElement.outerHTML],{type:'text/html'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='portafolio_cristian_palomino.html';
+  a.click();
+  closeModal();
+}
+
+const tC='#8090a8', gC='rgba(0,0,0,0.05)';
+const base={responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:tC,font:{size:11}},grid:{color:gC},border:{color:'transparent'}},y:{ticks:{color:tC,font:{size:11}},grid:{color:gC},border:{color:'transparent'}}}};
+const meses=['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+const ventas=[68,51,58,63,72,69,74,71,76,85,89,98];
+const ma3=ventas.map((v,i)=>i<2?null:Math.round((ventas[i-2]+ventas[i-1]+v)/3));
+
+new Chart(document.getElementById('c1'),{type:'line',data:{labels:meses,datasets:[{label:'Ventas (S/ K)',data:ventas,borderColor:'#1a2744',backgroundColor:'rgba(26,39,68,0.06)',fill:true,tension:.35,pointRadius:4,pointBackgroundColor:'#1a2744',borderWidth:2},{label:'Media móvil 3m',data:ma3,borderColor:'#2ec4b6',borderDash:[5,3],fill:false,tension:.35,pointRadius:2,borderWidth:1.5}]},options:{...base,plugins:{legend:{display:true,labels:{color:tC,font:{size:11},boxWidth:12,padding:16}}},scales:{x:base.scales.x,y:{...base.scales.y,min:40,ticks:{color:tC,font:{size:11},callback:v=>'S/'+v+'K'}}}}});
+
+new Chart(document.getElementById('c2'),{type:'doughnut',data:{labels:['Lácteos','Carnes','Bebidas','Panadería','Verduras','Limpieza'],datasets:[{data:[24,20,18,14,13,11],backgroundColor:['#1a2744','#2ec4b6','#f4a261','#e76f51','#8ecae6','#a8dadc'],borderWidth:2,borderColor:'#fff',hoverOffset:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'right',labels:{color:tC,font:{size:10},boxWidth:10,padding:8,generateLabels:c=>c.data.labels.map((l,i)=>({text:l+' '+c.data.datasets[0].data[i]+'%',fillStyle:c.data.datasets[0].backgroundColor[i],index:i}))}}},cutout:'60%'}});
+
+new Chart(document.getElementById('c3'),{type:'bar',data:{labels:['Leche Gloria 1L','Pollo kg','Coca-Cola 3L','Pan de molde','Yogurt Laive'],datasets:[{data:[142,118,97,84,71],backgroundColor:['#1a2744','#253460','#2ec4b6','#5acac3','#8edcd8'],borderRadius:5,borderSkipped:false}]},options:{...base,indexAxis:'y',scales:{x:{...base.scales.x,ticks:{color:tC,font:{size:10},callback:v=>'S/'+v+'K'}},y:{...base.scales.y,ticks:{color:tC,font:{size:10}}}}}});
+
+const s12=['S1','S2','S3','S4','S5','S6','S7','S8','S9','S10','S11','S12'];
+new Chart(document.getElementById('c4'),{type:'line',data:{labels:s12,datasets:[{label:'Cohorte Mar',data:[100,72,54,44,41,39,37,35,34,33,33,34],borderColor:'#1a2744',fill:false,tension:.3,pointRadius:2,borderWidth:2},{label:'Cohorte Feb',data:[100,68,50,40,37,35,33,32,31,31,30,30],borderColor:'#2ec4b6',fill:false,tension:.3,pointRadius:2,borderWidth:1.5},{label:'Cohorte Ene',data:[100,75,58,48,45,43,41,40,39,38,38,39],borderColor:'#f4a261',fill:false,tension:.3,pointRadius:2,borderWidth:1.5}]},options:{...base,plugins:{legend:{display:true,labels:{color:tC,font:{size:10},boxWidth:10,padding:10}}},scales:{x:base.scales.x,y:{...base.scales.y,min:0,max:100,ticks:{color:tC,font:{size:10},callback:v=>v+'%'}}}}});
+
+new Chart(document.getElementById('c5'),{type:'doughnut',data:{labels:['Activos','En riesgo','Perdidos'],datasets:[{data:[34,20,46],backgroundColor:['#2ec4b6','#f4a261','#e76f51'],borderWidth:2,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'right',labels:{color:tC,font:{size:11},boxWidth:10,padding:10,generateLabels:c=>c.data.labels.map((l,i)=>({text:l+' — '+c.data.datasets[0].data[i]+'%',fillStyle:c.data.datasets[0].backgroundColor[i],index:i}))}}},cutout:'58%'}});
+
+new Chart(document.getElementById('c6'),{type:'bar',data:{labels:s12,datasets:[{label:'Activos',data:[5.2,5.0,4.8,4.9,5.1,5.0,4.9,5.1,5.2,5.0,5.1,5.3],backgroundColor:'rgba(26,39,68,0.85)',borderRadius:3,borderSkipped:false},{label:'En riesgo',data:[4.1,3.5,2.8,2.2,1.8,1.5,1.2,0.9,0.7,0.5,0.4,0.3],backgroundColor:'rgba(244,162,97,0.85)',borderRadius:3,borderSkipped:false},{label:'Perdidos',data:[3.8,2.4,1.2,0.5,0.2,0.1,0.1,0,0,0,0,0],backgroundColor:'rgba(231,111,81,0.85)',borderRadius:3,borderSkipped:false}]},options:{...base,plugins:{legend:{display:true,labels:{color:tC,font:{size:11},boxWidth:10,padding:14}}},scales:{x:base.scales.x,y:{...base.scales.y,ticks:{color:tC,font:{size:10},callback:v=>v+' ses.'}}}}});
+</script>
+</body>
+</html>
